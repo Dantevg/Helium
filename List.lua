@@ -1,4 +1,3 @@
-local Node = require "helium.Node"
 local Box = require "helium.Box"
 local Autopos = require "helium.Autopos"
 
@@ -12,7 +11,7 @@ function List.new(x, y, w, h)
 end
 
 function List:insert(node, i)
-	Node.insert(self, node, i)
+	Box.insert(self, node, i)
 	node.X = Autopos.vert.x(node)
 	node.Y = Autopos.vert.y(node)
 end

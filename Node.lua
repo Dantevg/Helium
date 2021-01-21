@@ -11,6 +11,7 @@ function Node.new(x, y)
 	self.inner = Dimensions.inner(self)
 	self.tags = {"*"}
 	self.style = {}
+	self.on = {}
 	self.nodes = {}
 	return setmetatable(self, Node)
 end
@@ -25,12 +26,13 @@ end
 function Node:insert(node, i)
 	node.parent = self
 	table.insert(self.nodes, i or #self.nodes+1, node)
+	return node
 end
 
 function Node:find(fn)
 	if not self.nodes then return end
-	for i, v in ipairs(self.nodes) do
-		if fn(v, i) then return v, i end
+	for i, node in ipairs(self.nodes) do
+		if fn(node, i) then return node, i end
 	end
 end
 
@@ -50,6 +52,25 @@ function Node:draw(canvas)
 	for _, node in ipairs(self.nodes) do
 		node:draw(canvas)
 	end
+end
+
+function Node:event(...)
+	-- First call nodes lowest in hierarchy
+	if self.nodes then
+		for _, node in ipairs(self.nodes) do
+			if node:event(...) == false then return false end
+		end
+	end
+	
+	-- Then call self
+	local params = {...}
+	local event = table.remove(params, 1)
+	if self.on[event] then return self.on[event](self, params) end
+end
+
+function Node:within(x, y)
+	return x >= self.outer:X() and x <= self.outer:X() + self.outer:W()
+		and y >= self.outer:Y() and y <= self.outer:Y() + self.outer:H()
 end
 
 function Node:__tostring()

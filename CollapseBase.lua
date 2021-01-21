@@ -1,6 +1,5 @@
 local Box = require "helium.Box"
 local Autopos = require "helium.Autopos"
-local Autosize = require "helium.Autosize"
 
 local CollapseBase = {}
 CollapseBase.__index = CollapseBase
@@ -19,15 +18,14 @@ function CollapseBase:drawself(canvas) end -- Don't draw self
 
 function CollapseBase:insert(node, i)
 	if #self.nodes >= 2 then error("Collapse can contain at most 2 elements") end
-	Node.insert(self, node, i)
-	local n = i or #self.nodes
+	Box.insert(self, node, i)
 	node.X = Autopos.vert.x(node)
 	node.Y = Autopos.vert.y(node)
 end
 
 function CollapseBase:draw(canvas)
-	if self.nodes[1] then self.nodes[1]:draw() end
-	if self.nodes[2] and not self:Collapsed() then self.nodes[2]:draw() end
+	if self.nodes[1] then self.nodes[1]:draw(canvas) end
+	if self.nodes[2] and not self:Collapsed() then self.nodes[2]:draw(canvas) end
 end
 
 function CollapseBase:__tostring()

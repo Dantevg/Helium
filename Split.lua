@@ -1,4 +1,3 @@
-local Node = require "helium.Node"
 local Box = require "helium.Box"
 local Autopos = require "helium.Autopos"
 local Autosize = require "helium.Autosize"
@@ -33,9 +32,9 @@ end
 
 function Split.hor:insert(node, i)
 	if #self.nodes >= 2 then error("Split can contain at most 2 elements") end
-	Node.insert(self, node, i)
+	Split.insert(self, node, i)
 	local n = #self.nodes
-	node.X = function(el)
+	node.X = function()
 		return math.floor(
 			self.inner:X()
 			+ (n >= 2 and self.inner:W() * self:Split()
@@ -43,7 +42,7 @@ function Split.hor:insert(node, i)
 		)
 	end
 	node.Y = Autopos.hor.y(node)
-	node.W = function(el)
+	node.W = function()
 		return (n >= 2 and math.ceil or math.floor)(
 			self.inner:W() * (n >= 2 and 1-self:Split() or self:Split())
 			- (self.padding or 0)/2
@@ -69,10 +68,10 @@ end
 
 function Split.vert:insert(node, i)
 	if #self.nodes >= 2 then error("Split can contain at most 2 elements") end
-	Node.insert(self, node, i)
+	Split.insert(self, node, i)
 	local n = #self.nodes
 	node.X = Autopos.vert.x(node)
-	node.Y = function(el)
+	node.Y = function()
 		return math.floor(
 			self.inner:Y()
 			+ (n >= 2 and self.inner:H() * self:Split()
@@ -80,7 +79,7 @@ function Split.vert:insert(node, i)
 		)
 	end
 	node.W = Autosize.FitParent.w(node)
-	node.H = function(el)
+	node.H = function()
 		return (n >= 2 and math.ceil or math.floor)(
 			self.inner:H() * (n >= 2 and 1-self:Split() or self:Split())
 			- (self.padding or 0)/2
