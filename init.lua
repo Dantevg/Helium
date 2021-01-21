@@ -1,9 +1,9 @@
---[[
+--[[--
 	
-	Helium (He) Framework
-	by RedPolygon
+	Helium (He) framework
 	
-	for MoonBox-C
+	@module helium
+	@author RedPolygon
 	
 ]]--
 
@@ -14,12 +14,22 @@ He._VERSION = "0.5"
 
 He.__index = He
 
+--- @type Helium
+
+--- Create a new Helium context.
+-- @tparam number w the width of the root element
+-- @tparam number h the height of the root element
+-- @treturn Helium the new Helium root element
 function He.new(w, h)
 	local self = Box(0, 0, w, h)
 	self.style = setmetatable({}, {__index = He.style})
 	return setmetatable(self, He)
 end
 
+--- Get a style value for a node.
+-- @tparam string style the style to get
+-- @tparam Node node the node for which to get the style
+-- @return the style value, or nil
 function He:Style(style, node)
 	for _, tag in ipairs(node.tags or {"*"}) do
 		if self.style[tag] and self.style[tag][style] then

@@ -1,31 +1,37 @@
+--- @submodule helium
+
 local CollapseBase = require "helium.CollapseBase"
-local Box = require "helium.Box"
 local Text = require "helium.Text"
+local List = require "helium.List"
 local Autopos = require "helium.Autopos"
 local Autosize = require "helium.Autosize"
 
 local Collapse = {}
 Collapse.__index = Collapse
 
+--- Create a new Collapse node.
+-- This is a convenience wrapper around the @{CollapseBase} node.
+-- It is basically a `CollapseBase` with a @{Text} node and a @{List} node.
+-- @tparam[optchain] number x the horizontal position of the node
+-- @tparam[optchain] number y the vertical position of the node
+-- @tparam[optchain] number w the width of the node
+-- @tparam[optchain] number h the height of the node
+-- @tparam[optchain] string name the title of the collapse node
+-- @treturn Collapse the new collapse node
+-- @see CollapseBase, Text, List
 function Collapse.new(x, y, w, h, name)
 	local self = CollapseBase(x, y, w, h)
 	table.insert(self.tags, 1, "Collapse")
 	
 	self.title = self:insert(Text(0, 0, name))
 	
-	self.content = self:insert(Box())
-	self.content.X = Autopos.vert.x(self.content)
-	self.content.Y = Autopos.vert.y(self.content)
-	self.content.W = Autosize.FitParent.w(self.content)
-	self.content.H = Autosize.FitParent.h(self.content)
+	self.content = self:insert(List())
+	self.content.X = Autopos.vert.X
+	self.content.Y = Autopos.vert.Y
+	self.content.W = Autosize.FitParent.W
+	self.content.H = Autosize.FitParent.H
 	
 	return setmetatable(self, Collapse)
-end
-
-function Collapse.on.click(self, x, y)
-	if self.title:within(x, y) then
-		self.collapsed = not self.collapsed
-	end
 end
 
 function Collapse:insert(node, i)

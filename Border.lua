@@ -1,13 +1,21 @@
+--- @submodule helium
+
 local Box = require "helium.Box"
 
 local Border = {}
 Border.__index = Border
 
+--- Create a new Border.
+-- The border will automatically take the outer size of its parent element.
+-- @treturn Border the new border node
+-- @see Box
 function Border.new()
 	local self = Box()
 	table.insert(self.tags, 1, "Border")
 	return setmetatable(self, Border)
 end
+
+--- @type Border
 
 function Border:X() return self.parent and self.parent.outer:X() or 0 end
 function Border:Y() return self.parent and self.parent.outer:Y() or 0 end

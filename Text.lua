@@ -1,8 +1,16 @@
+--- @submodule helium
+
 local Node = require "helium.Node"
 
 local Text = {}
 Text.__index = Text
 
+--- Create a new Text node.
+-- @tparam[optchain] number x the horizontal position of the node
+-- @tparam[optchain] number y the vertical position of the node
+-- @tparam[optchain] string text
+-- @treturn Text the new text node
+-- @see Node
 function Text.new(x, y, text)
 	local self = Node(x, y)
 	table.insert(self.tags, 1, "Text")
@@ -10,9 +18,18 @@ function Text.new(x, y, text)
 	return setmetatable(self, Text)
 end
 
+--- @type Text
+
+--- Get the text.
+-- @treturn string text
 function Text:Text() return self.text or "" end
-function Text:W() return #self:Text() end -- TODO: get bounding box
-function Text:H() return 1 end            -- TODO: get bounding box
+--- Get the text's width.
+-- @treturn number width
+function Text:W() return #self:Text() end
+--- Get the text's height.
+-- @treturn number height
+function Text:H() return 1 end
+-- TODO: get bounding box
 
 function Text:drawself(canvas)
 	canvas:colour(table.unpack(self:Style("colour")))
