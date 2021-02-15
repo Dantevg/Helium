@@ -12,6 +12,10 @@ Border.__index = Border
 function Border.new()
 	local self = Box()
 	table.insert(self.tags, 1, "Border")
+	self.X = function() return self.parent and self.parent:X() or 0 end
+	self.Y = function() return self.parent and self.parent:Y() or 0 end
+	self.W = function() return 0 end
+	self.H = function() return 0 end
 	return setmetatable(self, Border)
 end
 
@@ -25,7 +29,7 @@ function Border:H() return self.parent and self.parent.outer:H() or 0 end
 
 function Border:drawself(canvas)
 	canvas:colour(table.unpack(self:Style("colour")))
-	canvas:rect(self:X(), self:Y(), self:W(), self:H())
+	canvas:rect(Border.X(self), Border.Y(self), Border.W(self), Border.H(self))
 end
 
 function Border:__tostring()
