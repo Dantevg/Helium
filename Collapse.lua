@@ -28,8 +28,8 @@ function Collapse.new(x, y, w, h, name)
 	self.content = self:insert(List())
 	self.content.X = Autopos.vert.X
 	self.content.Y = Autopos.vert.Y
-	self.content.W = Autosize.FitParent.W
-	self.content.H = Autosize.FitParent.H
+	self.content.W = Autosize.fitParent.W
+	self.content.H = Autosize.fitParent.H
 	
 	return setmetatable(self, Collapse)
 end

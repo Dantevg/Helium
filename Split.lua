@@ -74,7 +74,7 @@ function Split.hor:insert(node, i)
 			- (self.padding or 0)/2
 		)
 	end
-	node.H = Autosize.FitParent.H
+	node.H = Autosize.fitParent.H
 end
 
 setmetatable(Split.hor, {
@@ -114,7 +114,7 @@ function Split.vert:insert(node, i)
 			+ (self.padding or 0)/2 or 0)
 		)
 	end
-	node.W = Autosize.FitParent.W
+	node.W = Autosize.fitParent.W
 	node.H = function()
 		return (n >= 2 and math.ceil or math.floor)(
 			self.inner:H() * (n >= 2 and 1-self:Split() or self:Split())
