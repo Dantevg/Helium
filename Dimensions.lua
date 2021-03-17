@@ -2,6 +2,14 @@
 -- @module helium.Dimensions
 -- @set no_return_or_parms=true
 
+function memo(fn)
+	return function(self, ...)
+		if self.node.memo and self.node.memo[fn] then return self.node.memo[fn] end
+		self.node.memo[fn] = fn(self.node, ...)
+		return self.node.memo[fn]
+	end
+end
+
 local Dimensions = {}
 
 function Dimensions.new(node)
@@ -27,24 +35,16 @@ end
 
 --- Get the outer x-position.
 -- @treturn number x
-function Dimensions.outer:X()
-	return self.node:Memo("outer.X", function() return self.node.X and self.node:X() or 0 end)
-end
+Dimensions.outer.X = memo(function(self) return self.X and self:X() or 0 end)
 --- Get the outer y-position.
 -- @treturn number y
-function Dimensions.outer:Y()
-	return self.node:Memo("outer.Y", function() return self.node.Y and self.node:Y() or 0 end)
-end
+Dimensions.outer.Y = memo(function(self) return self.Y and self:Y() or 0 end)
 --- Get the outer width.
 -- @treturn number width
-function Dimensions.outer:W()
-	return self.node:Memo("outer.W", function() return self.node.W and self.node:W() or 0 end)
-end
+Dimensions.outer.W = memo(function(self) return self.W and self:W() or 0 end)
 --- Get the outer height.
 -- @treturn number height
-function Dimensions.outer:H()
-	return self.node:Memo("outer.H", function() return self.node.H and self.node:H() or 0 end)
-end
+Dimensions.outer.H = memo(function(self) return self.H and self:H() or 0 end)
 
 setmetatable(Dimensions.outer, {
 	__index = Dimensions,
@@ -68,28 +68,28 @@ end
 
 --- Get the inner x-position.
 -- @treturn number x
-function Dimensions.inner:X()
-	return (self.node.outer and self.node.outer:X() or 0)
-		+ (self.node.padding or 0)
-end
+Dimensions.inner.X = memo(function(self)
+	return (self.outer and self.outer:X() or 0)
+		+ (self.padding or 0)
+end)
 --- Get the inner y-position.
 -- @treturn number y
-function Dimensions.inner:Y()
-	return (self.node.outer and self.node.outer:Y() or 0)
-		+ (self.node.padding or 0)
-end
+Dimensions.inner.Y = memo(function(self)
+	return (self.outer and self.outer:Y() or 0)
+		+ (self.padding or 0)
+end)
 --- Get the inner width.
 -- @treturn number width
-function Dimensions.inner:W()
-	return (self.node.outer and self.node.outer:W() or 0)
-		- 2*(self.node.padding or 0)
-end
+Dimensions.inner.W = memo(function(self)
+	return (self.outer and self.outer:W() or 0)
+		- 2*(self.padding or 0)
+end)
 --- Get the inner height.
 -- @treturn number height
-function Dimensions.inner:H()
-	return (self.node.outer and self.node.outer:H() or 0)
-		- 2*(self.node.padding or 0)
-end
+Dimensions.inner.H = memo(function(self)
+	return (self.outer and self.outer:H() or 0)
+		- 2*(self.padding or 0)
+end)
 
 setmetatable(Dimensions.inner, {
 	__index = Dimensions,
