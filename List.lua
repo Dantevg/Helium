@@ -27,6 +27,7 @@ function List:insert(node, i)
 	Box.insert(self, node, i)
 	node.X = Autopos.vert.X
 	node.Y = Autopos.vert.Y
+	return node
 end
 
 function List:__tostring()

@@ -75,6 +75,7 @@ function Split.hor:insert(node, i)
 		)
 	end
 	node.H = Autosize.fitParent.H
+	return node
 end
 
 setmetatable(Split.hor, {
@@ -121,6 +122,7 @@ function Split.vert:insert(node, i)
 			- (self.padding or 0)/2
 		)
 	end
+	return node
 end
 
 setmetatable(Split.vert, {
