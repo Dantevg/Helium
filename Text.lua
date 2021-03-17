@@ -14,7 +14,7 @@ Text.__index = Text
 function Text.new(x, y, text)
 	local self = Node(x, y)
 	table.insert(self.tags, 1, "Text")
-	self.text = text
+	self.text = tostring(text)
 	return setmetatable(self, Text)
 end
 
@@ -25,11 +25,10 @@ end
 function Text:Text() return self.text or "" end
 --- Get the text's width.
 -- @treturn number width
-function Text:W() return #self:Text() end
+function Text:W() return #self:Text() * (self:Style("fontWidth") or 1) end
 --- Get the text's height.
 -- @treturn number height
-function Text:H() return 1 end
--- TODO: get bounding box
+function Text:H() return self:Style("fontHeight") or 1 end
 
 function Text:drawself(canvas)
 	canvas:colour(table.unpack(self:Style("colour")))
