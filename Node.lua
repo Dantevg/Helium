@@ -19,6 +19,7 @@ function Node.new(x, y)
 	self.style = {}
 	self.on = {}
 	self.nodes = {}
+	self.memo = {}
 	return setmetatable(self, Node)
 end
 
@@ -88,6 +89,7 @@ function Node:draw(canvas)
 	for _, node in ipairs(self.nodes) do
 		node:draw(canvas)
 	end
+	self.memo = {} -- Reset memoisation table
 end
 
 --- Handle incoming events.
@@ -118,6 +120,16 @@ end
 function Node:within(x, y)
 	return x >= self.outer:X() and x <= self.outer:X() + self.outer:W()
 		and y >= self.outer:Y() and y <= self.outer:Y() + self.outer:H()
+end
+
+--- Memoise a value.
+-- @param the name of the memoised value
+-- @tparam function calc the function to generate the memoised value
+-- @return value the memoised (or calculated) value
+function Node:Memo(name, calc, ...)
+	if self.memo[name] then return self.memo[name] end
+	self.memo[name] = calc(...)
+	return self.memo[name]
 end
 
 function Node:__tostring()

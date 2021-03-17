@@ -28,22 +28,22 @@ end
 --- Get the outer x-position.
 -- @treturn number x
 function Dimensions.outer:X()
-	return self.node.X and self.node:X() or 0
+	return self.node:Memo("outer.X", function() return self.node.X and self.node:X() or 0 end)
 end
 --- Get the outer y-position.
 -- @treturn number y
 function Dimensions.outer:Y()
-	return self.node.Y and self.node:Y() or 0
+	return self.node:Memo("outer.Y", function() return self.node.Y and self.node:Y() or 0 end)
 end
 --- Get the outer width.
 -- @treturn number width
 function Dimensions.outer:W()
-	return self.node.W and self.node:W() or 0
+	return self.node:Memo("outer.W", function() return self.node.W and self.node:W() or 0 end)
 end
 --- Get the outer height.
 -- @treturn number height
 function Dimensions.outer:H()
-	return self.node.H and self.node:H() or 0
+	return self.node:Memo("outer.H", function() return self.node.H and self.node:H() or 0 end)
 end
 
 setmetatable(Dimensions.outer, {
